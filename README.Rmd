@@ -2,7 +2,7 @@
 title: "Analysis"
 author: "Prashan A. Welipitiya"
 date: "6/27/2020"
-output: pdf_document
+output: rmarkdown::github_document
 ---
 ```{r, include = FALSE}
 library(ggplot2)
