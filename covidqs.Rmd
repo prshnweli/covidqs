@@ -1,0 +1,39 @@
+---
+title: "Analysis"
+author: "Prashan A. Welipitiya"
+date: "6/27/2020"
+output: pdf_document
+---
+```{r, include = FALSE}
+library(ggplot2)
+library(lubridate)
+library(dplyr)
+```
+
+
+```{r}
+#https://github.com/nytimes/covid-19-data
+setwd("C:/Users/Prashan.Welipitiya/Desktop/covid-19-data")
+covid_states = read.csv("us-states.csv")
+covid_states$date <- ymd(covid_states$date)
+covid_counties = read.csv("us-counties.csv")
+covid_counties$date <- ymd(covid_counties$date)
+
+head(covid_counties)
+```
+
+```{r}
+
+covid_hot <- covid_states %>%
+filter(state == "California" | state == "Georgia" | state == "Florida" | state == "Louisiana")
+ggplot(covid_hot, aes(x=date, y=deaths, color = state)) + geom_line()
+
+```
+
+```{r}
+#CA_counties = filter(covid_counties, state == "California") 
+CA_counties = filter(covid_counties, state == "California")
+CA_counties = filter(CA_counties, county == "Santa Clara"| county == "Orange" | county == "San Diego")
+ggplot(CA_counties, aes(x=date, y=cases, color = county)) + geom_line()
+```
+
