@@ -1,9 +1,10 @@
 ---
-title: "Analysis"
-author: "Prashan A. Welipitiya"
-date: "6/27/2020"
+title: "COVID QUESTIONS: An exploratory data analysis on topics revolving around the current Covid-19 pandemic" 
 output: rmarkdown::github_document
 ---
+## Background
+
+### With all of 
 ```{r, include = FALSE}
 library(ggplot2)
 library(lubridate)
@@ -11,7 +12,7 @@ library(dplyr)
 ```
 
 
-```{r}
+```{r, include=FALSE}
 #https://github.com/nytimes/covid-19-data
 setwd("C:/Users/Prashan.Welipitiya/Desktop/covid-19-data")
 covid_states = read.csv("us-states.csv")
@@ -22,15 +23,15 @@ covid_counties$date <- ymd(covid_counties$date)
 head(covid_counties)
 ```
 
-```{r}
+```{r, echo=FALSE}
 
 covid_hot <- covid_states %>%
-filter(state == "California" | state == "Georgia" | state == "Florida" | state == "Louisiana")
+filter(state == "California" | state == "Texas" | state == "Florida" | state == "New York")
 ggplot(covid_hot, aes(x=date, y=deaths, color = state)) + geom_line()
 
 ```
 
-```{r}
+```{r, echo=FALSE}
 #CA_counties = filter(covid_counties, state == "California") 
 CA_counties = filter(covid_counties, state == "California")
 CA_counties = filter(CA_counties, county == "Santa Clara"| county == "Orange" | county == "San Diego")

@@ -1,0 +1,48 @@
+---
+title: "Analysis"
+author: "Prashan A. Welipitiya"
+output: pdf_document
+---
+## This markdown is just an overview of the proccess that I used to get my information. 
+
+```{r, include=FALSE}
+#library lists
+library(ggplot2)
+library(lubridate)
+library(dplyr)
+```
+## Data
+
+I'm going to be pulling the covid numbers from the New York Times Github. They have total numbers of cases and deaths per county and per state. 
+
+```{r}
+#https://github.com/nytimes/covid-19-data
+setwd("C:/Users/Prashan.Welipitiya/Desktop/covid-19-data")
+covid_states = read.csv("us-states.csv")
+covid_states$date <- ymd(covid_states$date)
+covid_counties = read.csv("us-counties.csv")
+covid_counties$date <- ymd(covid_counties$date)
+
+head(covid_counties)
+```
+
+
+I'm going to be using a dataset that was part of a homework assignments in an old class. This dataset has a lot of important information that I am curious about on counties in the US. It includes percent populations of 2016 voting information, elderly, black, white, hispanic, asian, education and income.  
+
+```{r}
+county_votes16 <- readRDS(url("https://ericwfox.github.io/data/county_votes16.rds"))
+head(county_votes16)
+#summary(county_votes16)
+```
+
+```{r}
+# To match the New York Times data, I'm going to add a collumn that changes the state abbreviation to the name 
+county_votes16$state_Name <- state.name[match(county_votes16$state,state.abb)]
+
+# And take the word county out of the county names. 
+county_votes16$county_Name <- as.character(county_votes16$county)
+county_votes16$county_Name <- substr(county_votes16$county_Name,1,nchar(county_votes16$county_Name) - 7)
+
+head(county_votes16)
+```
+
