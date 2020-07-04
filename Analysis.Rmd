@@ -17,13 +17,16 @@ I'm going to be pulling the covid numbers from the New York Times Github. They h
 
 ```{r}
 #https://github.com/nytimes/covid-19-data
-setwd("C:/Users/Prashan.Welipitiya/Desktop/covid-19-data")
+setwd("C:/Users/Prashan.Welipitiya/Documents/Prashan/covid-19-data")
 covid_states = read.csv("us-states.csv")
 covid_states$date <- ymd(covid_states$date)
 covid_counties = read.csv("us-counties.csv")
 covid_counties$date <- ymd(covid_counties$date)
 
-head(covid_counties)
+#head(covid_counties)
+
+td_counties <- covid_counties %>% filter(date == max(covid_counties$date))
+head(td_counties)
 ```
 
 
@@ -31,18 +34,69 @@ I'm going to be using a dataset that was part of a homework assignments in an ol
 
 ```{r}
 county_votes16 <- readRDS(url("https://ericwfox.github.io/data/county_votes16.rds"))
-head(county_votes16)
-#summary(county_votes16)
+#head(county_votes16)
 ```
 
 ```{r}
 # To match the New York Times data, I'm going to add a collumn that changes the state abbreviation to the name 
-county_votes16$state_Name <- state.name[match(county_votes16$state,state.abb)]
+county_votes16$state <- state.name[match(county_votes16$state,state.abb)]
 
 # And take the word county out of the county names. 
-county_votes16$county_Name <- as.character(county_votes16$county)
-county_votes16$county_Name <- substr(county_votes16$county_Name,1,nchar(county_votes16$county_Name) - 7)
+county_votes16$county <- as.character(county_votes16$county)
+county_votes16$county <- substr(county_votes16$county,1,nchar(county_votes16$county) - 7)
 
 head(county_votes16)
+```
+
+```{r}
+covid = merge(td_counties, county_votes16)
+covid
+```
+I need to add population data. I'm getting this from census.gov (https://www.census.gov/data/datasets/time-series/demo/popest/2010s-counties-total.html#par_textimage_70769902)
+
+```{r}
+pop = read.csv('https://www2.census.gov/programs-surveys/popest/datasets/2010-2019/counties/totals/co-est2019-alldata.csv')
+head(pop)
+```
+
+```{r}
+# I just want the county info, state name and population. 
+pop19 <- subset(pop, select = c(COUNTY,STNAME,CTYNAME,POPESTIMATE2019))
+
+# County number of 0 is the state population so I'm going to take that out for now. 
+popCounty <- pop19 %>% 
+  filter(COUNTY != 0)
+
+# Change headers to match
+
+popCounty <- popCounty %>% rename(ID = COUNTY)
+popCounty <- popCounty %>% rename(state = STNAME)
+popCounty <- popCounty %>% rename(county = CTYNAME)
+popCounty <- popCounty %>% rename(popEst19 = POPESTIMATE2019)
+
+# Take the word county out again
+popCounty$county <- substr(popCounty$county,1,nchar(popCounty$county) - 7)
+
+head(popCounty)
+
+covid <- merge(popCounty, covid)
+
+```
+
+```{r}
+covid$pct_cases <- covid$cases/covid$popEst19
+covid$pct_deaths <- covid$deaths/covid$popEst19
+head(covid)
+```
+
+```{r}
+lm1 <- lm(pct_cases~trump_pctvotes + pct_pop65 + pct_black + pct_white + pct_hispanic + pct_asian + highschool + bachelors + income, data = covid)
+summary(lm1)
+```
+
+
+```{r}
+par(mfrow=c(1,2), cex=0.75) 
+plot(lm1, (1:2))
 ```
 
