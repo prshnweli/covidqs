@@ -50,13 +50,12 @@ head(county_votes16)
 
 ```{r}
 covid = merge(td_counties, county_votes16)
-covid
+head(covid)
 ```
 I need to add population data. I'm getting this from census.gov (https://www.census.gov/data/datasets/time-series/demo/popest/2010s-counties-total.html#par_textimage_70769902)
 
 ```{r}
 pop = read.csv('https://www2.census.gov/programs-surveys/popest/datasets/2010-2019/counties/totals/co-est2019-alldata.csv')
-head(pop)
 ```
 
 ```{r}
