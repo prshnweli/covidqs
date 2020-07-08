@@ -10,6 +10,7 @@ output: pdf_document
 library(ggplot2)
 library(lubridate)
 library(dplyr)
+library(car)
 ```
 ## Data
 
@@ -87,15 +88,13 @@ covid$pct_cases <- covid$cases/covid$popEst19
 covid$pct_deaths <- covid$deaths/covid$popEst19
 head(covid)
 ```
-
 ```{r}
-lm1 <- lm(pct_cases~trump_pctvotes + pct_pop65 + pct_black + pct_white + pct_hispanic + pct_asian + highschool + bachelors + income, data = covid)
-summary(lm1)
+pairs(pct_cases~pct_black+pct_white+pct_hispanic+pct_asian, data = covid, cex = 0.6)
 ```
 
 
 ```{r}
-par(mfrow=c(1,2), cex=0.75) 
-plot(lm1, (1:2))
+pairs(pct_cases~highschool+bachelors+income+pct_pop65+trump_pctvotes, data = covid, cex = 0.6)
 ```
+
 
