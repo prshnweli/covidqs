@@ -1,7 +1,8 @@
-Analysis
+COVID QUESTIONS: An exploratory data analysis on topics revolving around
+the current Covid-19 pandemic
 ================
-Prashan A. Welipitiya
-6/27/2020
+
+### Background
 
 ![](README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
 

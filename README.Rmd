@@ -2,9 +2,9 @@
 title: "COVID QUESTIONS: An exploratory data analysis on topics revolving around the current Covid-19 pandemic" 
 output: rmarkdown::github_document
 ---
-## Background
+### Background
 
-### With all of 
+
 ```{r, include = FALSE}
 library(ggplot2)
 library(lubridate)
@@ -14,7 +14,7 @@ library(dplyr)
 
 ```{r, include=FALSE}
 #https://github.com/nytimes/covid-19-data
-setwd("C:/Users/Prashan.Welipitiya/Desktop/covid-19-data")
+setwd("C:/Users/Prashan.Welipitiya/Documents/prashan/covid-19-data")
 covid_states = read.csv("us-states.csv")
 covid_states$date <- ymd(covid_states$date)
 covid_counties = read.csv("us-counties.csv")
@@ -26,7 +26,7 @@ head(covid_counties)
 ```{r, echo=FALSE}
 
 covid_hot <- covid_states %>%
-filter(state == "California" | state == "Texas" | state == "Florida" | state == "New York")
+filter(state == "California" | state == "Texas" | state == "Florida" | state == "Michigan")
 ggplot(covid_hot, aes(x=date, y=deaths, color = state)) + geom_line()
 
 ```
